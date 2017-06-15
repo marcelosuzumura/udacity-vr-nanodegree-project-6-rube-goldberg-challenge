@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandInteraction : MonoBehaviour {
+public class GrabThrowManager : MonoBehaviour {
 
 	public SteamVR_TrackedObject trackedObj;
 	public SteamVR_Controller.Device device;
@@ -11,7 +11,7 @@ public class HandInteraction : MonoBehaviour {
 	void Start () {
 		this.trackedObj = this.GetComponent<SteamVR_TrackedObject> ();
 	}
-	
+
 	void Update () {
 		this.device = SteamVR_Controller.Input ((int)this.trackedObj.index);
 	}
@@ -29,16 +29,20 @@ public class HandInteraction : MonoBehaviour {
 	void GrabObject(Collider collider) {
 		collider.transform.SetParent (this.gameObject.transform);
 		collider.GetComponent<Rigidbody> ().isKinematic = true;
+
 		this.device.TriggerHapticPulse (2000);
+
 		Debug.Log ("You are touching down the trigger on an object");
 	}
 
 	void ThrowObject (Collider collider) {
 		collider.transform.SetParent (null);
+
 		Rigidbody rigidBody = collider.GetComponent<Rigidbody> ();
 		rigidBody.isKinematic = false;
 		rigidBody.velocity = this.device.velocity * throwForce;
 		rigidBody.angularVelocity = this.device.angularVelocity;
+
 		Debug.Log ("You have released the trigger");
 	}
 
