@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class CollectibleManager : MonoBehaviour {
 
+	private float speed = 200f;
+
 	private LevelProgressionManager levelProgressionManager;
 
 	void Start () {
 		this.levelProgressionManager = GameObject.Find("Ball").GetComponent<LevelProgressionManager> ();
+	}
+
+	void Update() {
+		this.transform.Rotate (Vector3.up, speed * Time.deltaTime);
 	}
 
 	void OnTriggerEnter(Collider collider) {

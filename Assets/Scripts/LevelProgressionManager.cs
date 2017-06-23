@@ -5,6 +5,9 @@ using UnityEngine;
 public class LevelProgressionManager : MonoBehaviour {
 
 	public GameObject[] collectibles;
+	public GameObject levelCompleteText;
+	public string nextLevel;
+
 	public Material canCompleteLevelMaterial;
 	public Material cannotCompleteLevelMaterial;
 
@@ -36,7 +39,15 @@ public class LevelProgressionManager : MonoBehaviour {
 	void OnCollisionEnter(Collision collision) {
 		if (collision.collider.CompareTag("Goal") && this.AllCollectiblesCollected() && !this.cheating) {
 			Debug.Log ("LEVEL COMPLETE!!!!!");
+
+			this.levelCompleteText.SetActive (true);
+
+			Invoke ("LoadNextLevel", 5);
 		}
+	}
+
+	void LoadNextLevel() {
+		SteamVR_LoadLevel.Begin (this.nextLevel);
 	}
 
 	bool AllCollectiblesCollected() {
