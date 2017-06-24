@@ -18,7 +18,7 @@ public class GrabThrowManager : MonoBehaviour {
 
 	void OnTriggerStay(Collider collider) {
 		if (collider.gameObject.CompareTag("Throwable") || collider.gameObject.CompareTag("Structure")) {
-			Debug.Log ("You are touching a throwable or a structure");
+//			Debug.Log ("You are touching a throwable or a structure");
 			if (this.device.GetPressDown (SteamVR_Controller.ButtonMask.Trigger)) {
 				GrabObject (collider);
 			} else if (this.device.GetPressUp (SteamVR_Controller.ButtonMask.Trigger)) {

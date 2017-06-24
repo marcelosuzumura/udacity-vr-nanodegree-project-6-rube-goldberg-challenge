@@ -28,7 +28,8 @@ public class ControllerInputManager : MonoBehaviour {
 	void Update () {
 		this.device = SteamVR_Controller.Input ((int)this.trackedObj.index);
 
-		if (this.device.GetPress (SteamVR_Controller.ButtonMask.Touchpad)) {
+//		if (this.device.GetPress (SteamVR_Controller.ButtonMask.Touchpad)) {
+		if (this.device.GetTouchDown (SteamVR_Controller.ButtonMask.Touchpad) || this.device.GetTouch (SteamVR_Controller.ButtonMask.Touchpad)) {
 			this.laser.gameObject.SetActive (true);
 			teleportAimerObject.SetActive (true);
 
@@ -74,14 +75,22 @@ public class ControllerInputManager : MonoBehaviour {
 			}
 		}
 
-		if (this.device.GetPressUp (SteamVR_Controller.ButtonMask.Touchpad)) {
-			this.laser.gameObject.SetActive (false);
-			this.teleportAimerObject.SetActive (false);
+		if (this.device.GetTouchUp (SteamVR_Controller.ButtonMask.Touchpad)) {
+			this.ResetAimer ();
+		}
+
+		if (this.device.GetPressDown (SteamVR_Controller.ButtonMask.Touchpad)) {
+			this.ResetAimer ();
 			
 			if (this.validTeleportLocation) {
 				this.player.transform.position = this.teleportLocation;
 			}
 		}
+	}
+
+	void ResetAimer() {
+		this.laser.gameObject.SetActive (false);
+		this.teleportAimerObject.SetActive (false);
 	}
 
 }

@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class LevelProgressionManager : MonoBehaviour {
 
-	public GameObject[] collectibles;
 	public GameObject levelCompleteText;
 	public string nextLevel;
 
 	public Material canCompleteLevelMaterial;
 	public Material cannotCompleteLevelMaterial;
+
+	private List<GameObject> collectibles = new List<GameObject> ();
 
 	private AntiCheatManager antiCheatManager;
 
@@ -18,12 +19,17 @@ public class LevelProgressionManager : MonoBehaviour {
 	private Renderer ballRenderer;
 
 	void Start() {
+		GameObject collectiblesHolder = GameObject.Find ("Collectibles");
+		foreach (Transform collectible in collectiblesHolder.transform) {
+			collectibles.Add (collectible.gameObject);
+		}
+
 		this.antiCheatManager = GameObject.Find ("Platform").GetComponent<AntiCheatManager> ();
 		this.ballRenderer = this.gameObject.GetComponent<Renderer> ();
 	}
 
 	public void ResetLevelProgression() {
-		for (int i = 0; i < this.collectibles.Length; i++) {
+		for (int i = 0; i < this.collectibles.Count; i++) {
 			this.collectibles [i].SetActive (true);
 		}
 
@@ -41,17 +47,20 @@ public class LevelProgressionManager : MonoBehaviour {
 			Debug.Log ("LEVEL COMPLETE!!!!!");
 
 			this.levelCompleteText.SetActive (true);
+			this.GetComponent<BallReset> ().gameObject.SetActive (false);
 
-			Invoke ("LoadNextLevel", 5);
+			Invoke ("LoadNextLevel", 3);
 		}
 	}
 
 	void LoadNextLevel() {
-		SteamVR_LoadLevel.Begin (this.nextLevel);
+		if (this.nextLevel != "") {
+			SteamVR_LoadLevel.Begin (this.nextLevel);
+		}
 	}
 
 	bool AllCollectiblesCollected() {
-		return this.collectiblesCollected == this.collectibles.Length;
+		return this.collectiblesCollected == this.collectibles.Count;
 	}
 
 	public void ChangeBallMaterialIfCheating() {
